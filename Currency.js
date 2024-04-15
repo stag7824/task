@@ -7,16 +7,6 @@
 * @param string input free form test
 * @returns JSON object contains currency and price
 */
-function commafy( num ) {
-    var str = num.toString().split('.');
-    if (str[0].length >= 3) {
-        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
-    }
-    if (str[1] && str[1].length >= 5) {
-        str[1] = str[1].replace(/(\d{3})/g, '$1 ');
-    }
-    return str.join('.');
-}
 function get_currency_and_price(input) {
     const currencies = ['AUD', 'NZD', 'USD', 'CAD',
     'EUR', 'GBP', 'PKR', 'JPY', 'CNY', 'WON', 'INR', 'IDR',
@@ -25,26 +15,25 @@ function get_currency_and_price(input) {
     // Implement your logic here    
     let currency = "";
     let price = "";
-    
+    // Get Currency
     for(let i in currencies){
         if(input.includes(currencies[i])){
-            // console.log("Currency here",currencies[i]);
             currency=currencies[i];
             break;
-            
         }
     }
-
-    input = input.split(" ").join('');
-
-    let numbers = input.replace(/[^0-9.]/g, '');
-    // price=input.match('/\d+/g');
-    if(numbers[0]=='.'){
-        numbers=numbers.substring(1);
+    // Get Price
+    price = input.replace(/[^0-9.]/g, '');
+    // Removing the first point as seen in the test cases
+    if(price[0]=='.'){
+        price=price.substring(1);
     }
-    numbers=commafy(numbers);
-    price = numbers;
-    // console.log("price here", price);
+    // Adding comma to the price
+    var str = price.split('.');
+    if (str[0].length >= 3) {
+        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+    }
+    price=str.join('.');
     
     return {currency, price}
  }
